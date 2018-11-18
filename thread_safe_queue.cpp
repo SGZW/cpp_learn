@@ -66,5 +66,6 @@ int main() {
         _producer.join();
     }
     _consumer.join();
+    delete _thread_safe_queue;
     return 0;
 }
