@@ -47,18 +47,18 @@ private:
 
 int main() {
     std::size_t _buffer_size = 10;
-    ThreadSafeQueue<int>* _thread_safe_queue = new ThreadSafeQueue<int>(_buffer_size);
+    std::shared_ptr<ThreadSafeQueue<int>> p = std::make_shared<ThreadSafeQueue<int>>(_buffer_size);
     std::vector<std::thread> _producers;
     for (auto i = 0; i < _buffer_size; i++) {
-        _producers.push_back(std::thread([&_thread_safe_queue, i]() {
+        _producers.push_back(std::thread([&p, i]() {
             std::cout << "queue push " + std::to_string(i) + "\n";
-            _thread_safe_queue->push(i);
+            p->push(i);
         }));
     }
-    std::thread _consumer([&_thread_safe_queue, _buffer_size]() {
+    std::thread _consumer([&p, _buffer_size]() {
         for(auto i = 0; i < _buffer_size; i++) {
             int res;
-            _thread_safe_queue->pop(res);
+            p->pop(res);
             std::cout << "queue pop " + std::to_string(res) + "\n";
         }
     });
@@ -66,6 +66,5 @@ int main() {
         _producer.join();
     }
     _consumer.join();
-    delete _thread_safe_queue;
     return 0;
 }
