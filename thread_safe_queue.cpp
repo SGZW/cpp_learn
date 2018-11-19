@@ -9,7 +9,6 @@
 template <typename T>
 class ThreadSafeQueue {
 public:
-
     ThreadSafeQueue(std::size_t capacity): _capacity(capacity) {
         assert(_capacity > 0);
     }
